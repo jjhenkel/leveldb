@@ -1,0 +1,436 @@
+{
+    "cells": [
+        {
+            "source": [
+                "![code-book logo](data:image/svg+xml,%3Csvg%20width%3D%22400%22%20height%3D%22100%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20400%20100%22%3E%0A%20%3Cstyle%20type%3D%22text%2Fcss%22%3E.st0%7Bfill%3A%23000000%3Bstroke%3A%23000000%3Bstroke-width%3A3%3Bstroke-miterlimit%3A10%3B%7D%0A%09.st1%7Bstroke%3A%23000000%3Bstroke-width%3A3%3Bstroke-miterlimit%3A10%3B%7D%0A%09.st2%7Bfill%3Anone%3Bstroke%3A%23000000%3Bstroke-width%3A3%3Bstroke-miterlimit%3A10%3B%7D%0A%09.st3%7Bstroke%3A%23000000%3Bstroke-width%3A3%3Bstroke-miterlimit%3A10%3B%7D%0A%09.st4%7Bfill%3A%23000000%3Bstroke%3A%23000000%3Bstroke-width%3A4%3Bstroke-miterlimit%3A10%3B%7D%0A%09.st5%7Bfill%3A%23000000%3Bstroke%3A%23000000%3Bstroke-width%3A2%3Bstroke-miterlimit%3A10%3B%7D%0A%09.st6%7Bstroke%3A%23000000%3Bstroke-width%3A2%3Bstroke-miterlimit%3A10%3B%7D%0A%09.st7%7Bfill%3Anone%3Bstroke%3A%23000000%3Bstroke-width%3A2%3Bstroke-miterlimit%3A10%3B%7D%0A%09.st8%7Bstroke%3A%23000000%3Bstroke-width%3A2%3Bstroke-miterlimit%3A10%3B%7D%0A%09.st9%7Bfill%3Anone%3Bstroke%3A%23000000%3Bstroke-width%3A5%3Bstroke-miterlimit%3A10%3B%7D%0A%09.st10%7Bfill%3Anone%3B%7D%0A%09.st11%7Bstroke%3A%23000000%3Bstroke-width%3A4%3Bstroke-miterlimit%3A10%3B%7D%0A%09.st12%7Bfill%3Anone%3Bstroke%3A%23000000%3Bstroke-width%3A4%3Bstroke-miterlimit%3A10%3B%7D%0A%09.st13%7Bfill%3A%23000000%3Bstroke%3A%23000000%3Bstroke-width%3A4%3Bstroke-linecap%3Around%3Bstroke-miterlimit%3A10%3B%7D%0A%09.st14%7Bfill%3A%23000000%3B%7D%0A%09.st15%7Bfill%3Anone%3Bstroke%3A%23000000%3Bstroke-width%3A4%3Bstroke-linecap%3Around%3Bstroke-miterlimit%3A10%3B%7D%0A%09.st16%7Bfill%3A%23000000%3Bstroke%3A%23000000%3Bstroke-width%3A3%3Bstroke-linecap%3Around%3Bstroke-miterlimit%3A10%3B%7D%0A%09.st17%7Bfill%3Anone%3Bstroke%3A%23000000%3Bstroke-width%3A5%3Bstroke-linecap%3Around%3Bstroke-miterlimit%3A10%3B%7D%0A%09.st18%7Bfill%3Anone%3Bstroke%3A%23000000%3Bstroke-miterlimit%3A10%3B%7D%0A%09.st19%7Bfill%3Anone%3Bstroke%3A%23000000%3Bstroke-width%3A3%3Bstroke-miterlimit%3A10%3B%7D%0A%09.st20%7Bstroke%3A%23000000%3Bstroke-width%3A1.5%3Bstroke-miterlimit%3A10%3B%7D%0A%09.st21%7Bstroke%3A%23000000%3Bstroke-miterlimit%3A10%3B%7D%0A%09.st22%7Bfill%3A%23000000%3Bstroke%3A%23000000%3Bstroke-width%3A5%3Bstroke-miterlimit%3A10%3B%7D%0A%09.st23%7Bfill%3A%23000000%3Bstroke%3A%23000000%3Bstroke-width%3A5%3Bstroke-linecap%3Around%3Bstroke-miterlimit%3A10%3B%7D%0A%09.st24%7Bfill%3Anone%3Bstroke%3A%23000000%3Bstroke-width%3A2%3Bstroke-linecap%3Around%3Bstroke-miterlimit%3A10%3B%7D%0A%09.st25%7Bfill%3Anone%3Bstroke%3A%23000000%3Bstroke-width%3A2%3Bstroke-miterlimit%3A10%3B%7D%0A%09.st26%7Bfill%3A%23000000%3Bstroke%3A%23000000%3Bstroke-width%3A2%3Bstroke-miterlimit%3A10%3B%7D%3C%2Fstyle%3E%0A%0A%20%3Cg%3E%0A%20%20%3Ctitle%3Ebackground%3C%2Ftitle%3E%0A%20%20%3Crect%20fill%3D%22none%22%20id%3D%22canvas_background%22%20height%3D%22102%22%20width%3D%22402%22%20y%3D%22-1%22%20x%3D%22-1%22%2F%3E%0A%20%3C%2Fg%3E%0A%20%3Cg%3E%0A%20%20%3Ctitle%3ELayer%201%3C%2Ftitle%3E%0A%20%20%3Crect%20id%3D%22svg_17%22%20height%3D%2294.45281%22%20width%3D%22393.70052%22%20y%3D%222.77359%22%20x%3D%223.14973%22%20stroke-opacity%3D%22null%22%20stroke-dasharray%3D%222%2C2%22%20stroke-width%3D%220%22%20stroke%3D%22%23000%22%20fill%3D%22%23ffffff%22%2F%3E%0A%20%20%3Cg%20stroke%3D%22null%22%20id%3D%22svg_1%22%20fill%3D%22none%22%3E%0A%20%20%20%3Cpath%20stroke%3D%22null%22%20fill%3D%22%231f1f23%22%20id%3D%22svg_2%22%20d%3D%22m32.7691%2C72.00838c-1.05918%2C0%20-1.8914%2C0.85545%20-1.8914%2C1.9442s0.83222%2C1.9442%201.8914%2C1.9442l3.17755%2C0l0%2C9.09887l58.02811%2C0l0%2C-69.99131l-58.02811%2C0l0%2C10.80977l-3.17755%2C0c-1.05918%2C0%20-1.8914%2C0.85545%20-1.8914%2C1.9442s0.83222%2C1.9442%201.8914%2C1.9442l3.17755%2C0l0%2C11.50968l-3.17755%2C0c-1.05918%2C0%20-1.8914%2C0.85545%20-1.8914%2C1.9442s0.83222%2C1.9442%201.8914%2C1.9442l3.17755%2C0l0%2C11.50968l-3.17755%2C0c-1.05918%2C0%20-1.8914%2C0.85545%20-1.8914%2C1.9442s0.83222%2C1.9442%201.8914%2C1.9442l3.17755%2C0l0%2C11.50968l-3.17755%2C0zm57.42286%2C9.09887l-9.00306%2C0l0%2C-62.21449l9.00306%2C0l0%2C62.21449zm-50.46251%2C-20.60855l3.85845%2C0c1.05918%2C0%201.8914%2C-0.85545%201.8914%2C-1.9442s-0.83222%2C-1.9442%20-1.8914%2C-1.9442l-3.85845%2C0l0%2C-11.50968l3.85845%2C0c1.05918%2C0%201.8914%2C-0.85545%201.8914%2C-1.9442s-0.83222%2C-1.9442%20-1.8914%2C-1.9442l-3.85845%2C0l0%2C-11.50968l3.85845%2C0c1.05918%2C0%201.8914%2C-0.85545%201.8914%2C-1.9442s-0.83222%2C-1.9442%20-1.8914%2C-1.9442l-3.85845%2C0l0%2C-6.92136l39.94634%2C0l0%2C62.21449l-39.94634%2C0l0%2C-5.21046l3.85845%2C0c1.05918%2C0%201.8914%2C-0.85545%201.8914%2C-1.9442s-0.83222%2C-1.9442%20-1.8914%2C-1.9442l-3.85845%2C0l0%2C-11.50968z%22%2F%3E%0A%20%20%3C%2Fg%3E%0A%20%20%3Ctext%20stroke%3D%22%23000%22%20transform%3D%22matrix%280.8054574728012085%2C0%2C0%2C0.7810266017913818%2C4.960834443569183%2C3.137478221207857%29%20%22%20stroke-dasharray%3D%222%2C2%22%20font-style%3D%22normal%22%20font-weight%3D%22normal%22%20xml%3Aspace%3D%22preserve%22%20text-anchor%3D%22start%22%20font-family%3D%22%27Courier%20New%27%2C%20Courier%2C%20monospace%22%20font-size%3D%2263%22%20id%3D%22svg_3%22%20y%3D%2276.69063%22%20x%3D%2253.99764%22%20stroke-width%3D%220%22%20fill%3D%22%2322a6f1%22%3E%7B%3C%2Ftext%3E%0A%20%20%3Ctext%20font-weight%3D%22normal%22%20font-style%3D%22normal%22%20stroke%3D%22%23000%22%20transform%3D%22matrix%280.9952208399772644%2C0%2C0%2C1%2C0.4419229533523321%2C0%29%20%22%20stroke-dasharray%3D%222%2C2%22%20xml%3Aspace%3D%22preserve%22%20text-anchor%3D%22start%22%20font-family%3D%22%27Courier%20New%27%2C%20Courier%2C%20monospace%22%20font-size%3D%2257%22%20id%3D%22svg_6%22%20y%3D%2266.2222%22%20x%3D%2292.4707%22%20stroke-width%3D%220%22%20fill%3D%22%2322a6f1%22%3Eode%20book%3C%2Ftext%3E%0A%20%20%3Cline%20stroke-linecap%3D%22undefined%22%20stroke-linejoin%3D%22undefined%22%20id%3D%22svg_7%22%20y2%3D%2269.54894%22%20x2%3D%22395.2319%22%20y1%3D%2270.43167%22%20x1%3D%2299.51514%22%20stroke-width%3D%220%22%20fill%3D%22none%22%2F%3E%0A%20%20%3Cline%20stroke-width%3D%220%22%20stroke-linecap%3D%22undefined%22%20stroke-linejoin%3D%22undefined%22%20id%3D%22svg_8%22%20y2%3D%2272.78564%22%20x2%3D%22394.95962%22%20y1%3D%2273.37413%22%20x1%3D%2298.61046%22%20fill%3D%22none%22%2F%3E%0A%20%20%3Cline%20transform%3D%22rotate%285%20226.92346191406244%2C80.43601989746088%29%20%22%20stroke-dasharray%3D%222%2C2%22%20stroke-linecap%3D%22undefined%22%20stroke-linejoin%3D%22undefined%22%20id%3D%22svg_12%22%20y2%3D%2276.90508%22%20x2%3D%22284.30133%22%20y1%3D%2283.96697%22%20x1%3D%22169.54558%22%20stroke-width%3D%22NaN%22%20fill%3D%22none%22%2F%3E%0A%20%20%3Ctext%20transform%3D%22matrix%280.9974961268488016%2C0%2C0%2C0.8404798463773975%2C10.796253784883731%2C-100.20722702202711%29%20%22%20stroke-dasharray%3D%222%2C2%22%20font-style%3D%22normal%22%20font-weight%3D%22normal%22%20xml%3Aspace%3D%22preserve%22%20text-anchor%3D%22start%22%20font-family%3D%22%27Courier%20New%27%2C%20Courier%2C%20monospace%22%20font-size%3D%2226%22%20id%3D%22svg_13%22%20y%3D%22185.73467%22%20x%3D%22185.41808%22%20stroke-width%3D%220%22%20fill%3D%22%231f1f23%22%3E%7B%3C%2Ftext%3E%0A%20%20%3Ctext%20transform%3D%22matrix%280.9974961268488016%2C0%2C0%2C0.8404798463773975%2C10.796253784883731%2C-100.20722702202711%29%20%22%20stroke-dasharray%3D%222%2C2%22%20font-style%3D%22normal%22%20font-weight%3D%22normal%22%20xml%3Aspace%3D%22preserve%22%20text-anchor%3D%22start%22%20font-family%3D%22%27Courier%20New%27%2C%20Courier%2C%20monospace%22%20font-size%3D%2226%22%20id%3D%22svg_15%22%20y%3D%22185.73467%22%20x%3D%22201.64167%22%20stroke-width%3D%220%22%20fill%3D%22%231f1f23%22%3E%7D%3C%2Ftext%3E%0A%20%3C%2Fg%3E%0A%3C%2Fsvg%3E)\n",
+                "\n",
+                "The next few cells have been auto-generated and will guide you through getting connected to your code!"
+            ],
+            "metadata": {
+                "language_info": {
+                    "name": "python"
+                }
+            },
+            "cell_type": "markdown"
+        },
+        {
+            "source": [
+                "# code-book autogen: if we haven't yet, let's do some one time setup\n",
+                "cb.one_time_setup()"
+            ],
+            "metadata": {
+                "language_info": {
+                    "name": "python"
+                },
+                "is_one_time_setup": true,
+                "runState": 3,
+                "runStartTime": 1603826985364,
+                "lastRunDuration": 170,
+                "statusMessage": "done"
+            },
+            "cell_type": "code",
+            "outputs": [
+                {
+                    "output_type": "display_data",
+                    "data": {
+                        "x-application/code-book-one-time-setup": "COMPLETE"
+                    }
+                }
+            ]
+        },
+        {
+            "source": [
+                "# code-book autogen: then, we can attach to your code!\n",
+                "project = (\n",
+                "  cb.create_project(name='leveldb', commit='7f1fcda9e2d4072d28c1acea91fcad546188905f')\n",
+                "    .with_backend(cb.backends().azure())\n",
+                "    .with_build_options(cb.build_options())\n",
+                ")\n",
+                "\n",
+                "project.attach()"
+            ],
+            "metadata": {
+                "language_info": {
+                    "name": "python"
+                },
+                "runState": 2
+            },
+            "cell_type": "code",
+            "outputs": []
+        },
+        {
+            "source": [
+                "project.ingest()"
+            ],
+            "metadata": {
+                "language_info": {
+                    "name": "python"
+                },
+                "runState": 2
+            },
+            "cell_type": "code",
+            "outputs": []
+        },
+        {
+            "source": [
+                "project.poll_status()"
+            ],
+            "metadata": {
+                "language_info": {
+                    "name": "python"
+                }
+            },
+            "cell_type": "code",
+            "outputs": []
+        },
+        {
+            "source": [
+                "results = (\n",
+                "    project\n",
+                "      .query()\n",
+                "      .calls()\n",
+                "      .name_contains('open')\n",
+                "      .with_locations()\n",
+                "      .limit(30)\n",
+                "      .execute()\n",
+                "      .display()\n",
+                ")"
+            ],
+            "metadata": {
+                "language_info": {
+                    "name": "python"
+                }
+            },
+            "cell_type": "code",
+            "outputs": [
+                {
+                    "output_type": "display_data",
+                    "data": {
+                        "x-application/code-book-tree-results": [
+                            {
+                                "as_text": "::fdopen(fd, \"w\")",
+                                "valid": true,
+                                "the_file_name": "/app/util/env_posix.cc",
+                                "start_line": 697,
+                                "start_column": 21,
+                                "end_line": 697,
+                                "end_column": 37
+                            },
+                            {
+                                "as_text": "::open(dirname_.c_str(), O_RDONLY | kOpenBaseFlags)",
+                                "valid": true,
+                                "the_file_name": "/app/util/env_posix.cc",
+                                "start_line": 353,
+                                "start_column": 14,
+                                "end_line": 353,
+                                "end_column": 64
+                            },
+                            {
+                                "as_text": "::open(filename.c_str(),\n                    O_APPEND | O_WRONLY | O_CREAT | kOpenBaseFlags, 0644)",
+                                "valid": true,
+                                "the_file_name": "/app/util/env_posix.cc",
+                                "start_line": 560,
+                                "start_column": 14,
+                                "end_line": 561,
+                                "end_column": 73
+                            },
+                            {
+                                "as_text": "::open(filename.c_str(),\n                    O_APPEND | O_WRONLY | O_CREAT | kOpenBaseFlags, 0644)",
+                                "valid": true,
+                                "the_file_name": "/app/util/env_posix.cc",
+                                "start_line": 690,
+                                "start_column": 14,
+                                "end_line": 691,
+                                "end_column": 73
+                            },
+                            {
+                                "as_text": "::open(filename.c_str(),\n                    O_TRUNC | O_WRONLY | O_CREAT | kOpenBaseFlags, 0644)",
+                                "valid": true,
+                                "the_file_name": "/app/util/env_posix.cc",
+                                "start_line": 547,
+                                "start_column": 14,
+                                "end_line": 548,
+                                "end_column": 72
+                            },
+                            {
+                                "as_text": "::open(filename.c_str(), O_RDONLY | kOpenBaseFlags)",
+                                "valid": true,
+                                "the_file_name": "/app/util/env_posix.cc",
+                                "start_line": 502,
+                                "start_column": 14,
+                                "end_line": 502,
+                                "end_column": 64
+                            },
+                            {
+                                "as_text": "::open(filename.c_str(), O_RDONLY | kOpenBaseFlags)",
+                                "valid": true,
+                                "the_file_name": "/app/util/env_posix.cc",
+                                "start_line": 515,
+                                "start_column": 14,
+                                "end_line": 515,
+                                "end_column": 64
+                            },
+                            {
+                                "as_text": "::open(filename.c_str(), O_RDWR | O_CREAT | kOpenBaseFlags, 0644)",
+                                "valid": true,
+                                "the_file_name": "/app/util/env_posix.cc",
+                                "start_line": 631,
+                                "start_column": 14,
+                                "end_line": 631,
+                                "end_column": 78
+                            },
+                            {
+                                "as_text": "::open(filename_.c_str(), O_RDONLY | kOpenBaseFlags)",
+                                "valid": true,
+                                "the_file_name": "/app/util/env_posix.cc",
+                                "start_line": 175,
+                                "start_column": 12,
+                                "end_line": 175,
+                                "end_column": 63
+                            },
+                            {
+                                "as_text": "::opendir(directory_path.c_str())",
+                                "valid": true,
+                                "the_file_name": "/app/util/env_posix.cc",
+                                "start_line": 578,
+                                "start_column": 18,
+                                "end_line": 578,
+                                "end_column": 50
+                            },
+                            {
+                                "as_text": "DestroyAndReopen(&new_options)",
+                                "valid": true,
+                                "the_file_name": "/app/db/db_test.cc",
+                                "start_line": 1565,
+                                "start_column": 3,
+                                "end_line": 1565,
+                                "end_column": 32
+                            },
+                            {
+                                "as_text": "DestroyAndReopen(&options)",
+                                "valid": true,
+                                "the_file_name": "/app/db/db_test.cc",
+                                "start_line": 1810,
+                                "start_column": 5,
+                                "end_line": 1810,
+                                "end_column": 30
+                            },
+                            {
+                                "as_text": "DestroyAndReopen()",
+                                "valid": true,
+                                "the_file_name": "/app/db/db_test.cc",
+                                "start_line": 259,
+                                "start_column": 7,
+                                "end_line": 259,
+                                "end_column": 24
+                            },
+                            {
+                                "as_text": "DestroyAndReopen()",
+                                "valid": true,
+                                "the_file_name": "/app/db/db_test.cc",
+                                "start_line": 1180,
+                                "start_column": 5,
+                                "end_line": 1180,
+                                "end_column": 22
+                            },
+                            {
+                                "as_text": "NoWriteTestReopenWithFault(RESET_DELETE_UNSYNCED_FILES)",
+                                "valid": true,
+                                "the_file_name": "/app/db/fault_injection_test.cc",
+                                "start_line": 535,
+                                "start_column": 7,
+                                "end_line": 535,
+                                "end_column": 61
+                            },
+                            {
+                                "as_text": "NoWriteTestReopenWithFault(RESET_DROP_UNSYNCED_DATA)",
+                                "valid": true,
+                                "the_file_name": "/app/db/fault_injection_test.cc",
+                                "start_line": 526,
+                                "start_column": 7,
+                                "end_line": 526,
+                                "end_column": 58
+                            },
+                            {
+                                "as_text": "PartialCompactTestReopenWithFault(RESET_DELETE_UNSYNCED_FILES,\n                                        num_pre_sync + num_post_sync, 0)",
+                                "valid": true,
+                                "the_file_name": "/app/db/fault_injection_test.cc",
+                                "start_line": 531,
+                                "start_column": 7,
+                                "end_line": 532,
+                                "end_column": 72
+                            },
+                            {
+                                "as_text": "PartialCompactTestReopenWithFault(RESET_DROP_UNSYNCED_DATA, num_pre_sync,\n                                        num_post_sync)",
+                                "valid": true,
+                                "the_file_name": "/app/db/fault_injection_test.cc",
+                                "start_line": 522,
+                                "start_column": 7,
+                                "end_line": 523,
+                                "end_column": 54
+                            },
+                            {
+                                "as_text": "Reopen(&options)",
+                                "valid": true,
+                                "the_file_name": "/app/db/db_test.cc",
+                                "start_line": 594,
+                                "start_column": 5,
+                                "end_line": 594,
+                                "end_column": 20
+                            },
+                            {
+                                "as_text": "Reopen(&options)",
+                                "valid": true,
+                                "the_file_name": "/app/db/db_test.cc",
+                                "start_line": 1007,
+                                "start_column": 5,
+                                "end_line": 1007,
+                                "end_column": 20
+                            },
+                            {
+                                "as_text": "Reopen(&options)",
+                                "valid": true,
+                                "the_file_name": "/app/db/db_test.cc",
+                                "start_line": 1017,
+                                "start_column": 5,
+                                "end_line": 1017,
+                                "end_column": 20
+                            },
+                            {
+                                "as_text": "Reopen(&options)",
+                                "valid": true,
+                                "the_file_name": "/app/db/db_test.cc",
+                                "start_line": 1034,
+                                "start_column": 3,
+                                "end_line": 1034,
+                                "end_column": 18
+                            },
+                            {
+                                "as_text": "Reopen(&options)",
+                                "valid": true,
+                                "the_file_name": "/app/db/db_test.cc",
+                                "start_line": 1059,
+                                "start_column": 5,
+                                "end_line": 1059,
+                                "end_column": 20
+                            },
+                            {
+                                "as_text": "Reopen(&options)",
+                                "valid": true,
+                                "the_file_name": "/app/db/db_test.cc",
+                                "start_line": 1071,
+                                "start_column": 3,
+                                "end_line": 1071,
+                                "end_column": 18
+                            },
+                            {
+                                "as_text": "Reopen(&options)",
+                                "valid": true,
+                                "the_file_name": "/app/db/db_test.cc",
+                                "start_line": 1083,
+                                "start_column": 3,
+                                "end_line": 1083,
+                                "end_column": 18
+                            },
+                            {
+                                "as_text": "Reopen(&options)",
+                                "valid": true,
+                                "the_file_name": "/app/db/db_test.cc",
+                                "start_line": 1096,
+                                "start_column": 3,
+                                "end_line": 1096,
+                                "end_column": 18
+                            },
+                            {
+                                "as_text": "Reopen(&options)",
+                                "valid": true,
+                                "the_file_name": "/app/db/db_test.cc",
+                                "start_line": 1110,
+                                "start_column": 3,
+                                "end_line": 1110,
+                                "end_column": 18
+                            },
+                            {
+                                "as_text": "Reopen(&options)",
+                                "valid": true,
+                                "the_file_name": "/app/db/db_test.cc",
+                                "start_line": 1128,
+                                "start_column": 3,
+                                "end_line": 1128,
+                                "end_column": 18
+                            },
+                            {
+                                "as_text": "Reopen(&options)",
+                                "valid": true,
+                                "the_file_name": "/app/db/db_test.cc",
+                                "start_line": 1183,
+                                "start_column": 5,
+                                "end_line": 1183,
+                                "end_column": 20
+                            },
+                            {
+                                "as_text": "Reopen(&options)",
+                                "valid": true,
+                                "the_file_name": "/app/db/db_test.cc",
+                                "start_line": 1202,
+                                "start_column": 7,
+                                "end_line": 1202,
+                                "end_column": 22
+                            }
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "source": [
+                "project.detach(keep_db=False)"
+            ],
+            "metadata": {
+                "language_info": {
+                    "name": "python"
+                }
+            },
+            "cell_type": "code",
+            "outputs": [
+                {
+                    "output_type": "display_data",
+                    "data": {
+                        "text/plain": "- Detaching...\n\u001b[K   ✓ 'findtune-az-autogen-vm-ft-db-680448' is stopped!\n\u001b[K   ✓ 'findtune-az-autogen-vm-ft-embed-800457' is stopped!\n\u001b[K   ✓ 'findtune-az-autogen-vm-ft-build-709783' is stopped!\n\u001b[K   ✓ Detached.\n"
+                    }
+                }
+            ]
+        },
+        {
+            "source": [
+                "project.deallocate(keep_db=False)"
+            ],
+            "metadata": {
+                "language_info": {
+                    "name": "python"
+                }
+            },
+            "cell_type": "code",
+            "outputs": [
+                {
+                    "output_type": "display_data",
+                    "data": {
+                        "text/plain": "- Deallocating...\n\u001b[K   ✓ Deallocated 'findtune-az-autogen-vm-ft-build-640084'\n\u001b[K   ✓ Deallocated 'findtune-az-autogen-vm-ft-db-674434'\n\u001b[K   ✓ Deallocated 'findtune-az-autogen-vm-ft-embed-638740'\n\u001b[K   ✓ Deallocated 'findtune-az-autogen-nic-ft-build-215245'\n\u001b[K   ✓ Deallocated 'findtune-az-autogen-nic-ft-db-190900'\n\u001b[K   ✓ Deallocated 'findtune-az-autogen-nic-ft-embed-988520'\n\u001b[K   ✓ Deallocated 'findtune-az-autogen-nsg-ft-db-966079'\n\u001b[K   ✓ Deallocated 'findtune-az-autogen-ip-ft-build-485309'\n\u001b[K   ✓ Deallocated 'findtune-az-autogen-ip-ft-db-541048'\n\u001b[K   ✓ Deallocated 'findtune-az-autogen-ip-ft-embed-954243'\n\u001b[K   ✓ Deallocated 'findtune-az-autogen-vnet-002442'\n\u001b[K   ✓ Resources have been freed.\n"
+                    }
+                }
+            ]
+        },
+        {
+            "source": [
+                ""
+            ],
+            "metadata": {
+                "language_info": {
+                    "name": "python"
+                }
+            },
+            "cell_type": "code",
+            "outputs": []
+        }
+    ]
+}
